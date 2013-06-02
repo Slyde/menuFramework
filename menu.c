@@ -282,11 +282,7 @@ static void menu_default_input_handler(char c)
 			}
 #endif
 
-			if (actionNum == 0 || actionNum > p_curPage->nb_items)
-			{
-				debug("Invalid action ! ");
-			}
-			else
+			if (actionNum > 0 && actionNum < p_curPage->nb_items)
 			{
 				debug("Action is valid, call the item action");
 				if (p_curPage->p_items_table[actionNum-1]->p_item_action != NULL)
@@ -294,8 +290,20 @@ static void menu_default_input_handler(char c)
 				else
 					debug("No action for this item");
 			}
+			else
+			{
+				menu_status("Invalid action !");
+#ifdef DEBUG
+				{
+				char str[50];
+				debug("Invalid action ! ");
+				sprintf(str, "actionNum = %d | nb_items = %d", actionNum, p_curPage->nb_items);
+				debug(str);
+				}
+#endif
+			}
+
 			// clear the buffer
-			menu_status("Invalid action !");
 			memset(input_buffer, 0, sizeof(input_buffer));
 			set_cursor_pos(actionFieldPos);
 			clear_end_of_line();
