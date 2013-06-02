@@ -17,6 +17,7 @@
 
 void item1_action(void)
 {
+	debug("Test item1_action and print to status bar");
 	menu_status("Item action and status bar tested");
 }
 
