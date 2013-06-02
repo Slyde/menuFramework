@@ -9,7 +9,7 @@
 #include <time.h>
 
 #ifdef DEBUG
-void debug_msg(char *file_name, char *msg)
+void debug_msg(char *file_name, int file_line, char *msg)
 {
 
 	time_t t;
@@ -21,7 +21,7 @@ void debug_msg(char *file_name, char *msg)
 
 	strftime(str, 9, "%H:%M:%S", &lt);
 
-	fprintf(stderr, "%s %s : %s\n", str, file_name, msg);
+	fprintf(stderr, "%s %s:%d => %s\n", str, file_name, file_line, msg);
 
 }
 #else
