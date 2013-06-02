@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define SEPARATION_LINE_LENGTH	50
+#define SEPARATION_LINE_LENGTH	80
 #define STATUS_FIELD_OFFSET		2
 #define LIVE_SECTION_OFFSET		3
 #define MAX_ACTION_LENGTH		3
