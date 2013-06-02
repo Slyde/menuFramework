@@ -1,0 +1,3 @@
+[submodule "menuFramework"]
+	path = menuFramework
+	url = ../../repo/menuFramework.git/
