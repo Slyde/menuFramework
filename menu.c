@@ -282,7 +282,7 @@ static void menu_default_input_handler(char c)
 			}
 #endif
 
-			if (actionNum > 0 && actionNum < p_curPage->nb_items)
+			if (actionNum > 0 && actionNum <= p_curPage->nb_items)
 			{
 				debug("Action is valid, call the item action");
 				if (p_curPage->p_items_table[actionNum-1]->p_item_action != NULL)
