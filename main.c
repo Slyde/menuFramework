@@ -10,6 +10,12 @@ extern struct menu_page firstPage;
 
 int main(void)
 {
+	{
+	char test[12];
+	sprintf(test, "sizeof : %d", sizeof(test));
+	debug(test);
+
+	}
 	debug("Application started");
 
 	menu_start(&firstPage);

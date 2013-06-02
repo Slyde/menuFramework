@@ -30,6 +30,9 @@
 								<option id="gnu.c.compiler.option.include.paths.2021357799" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../menuFramework&quot;"/>
 								</option>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1975177689" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="DEBUG"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1890067731" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.998801666" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">
