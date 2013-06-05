@@ -30,6 +30,11 @@ static pthread_mutex_t input_handler_mut = PTHREAD_MUTEX_INITIALIZER;
 
 static char input_buffer[MAX_ACTION_LENGTH];
 
+static char* p_getValueBuffer = NULL;
+static unsigned char  getValueBufferLen = 0;
+static unsigned char getValueBufferCursorPos = 0;
+void (*p_getValueBufferReturnHandler)(int errno, char* retStr);
+
 static void menu_show(void)
 {
 	int i;
@@ -190,6 +195,100 @@ void menu_live_print(struct cursor_pos pos, char *str)
 	fflush(stdout);
 
 	pthread_mutex_unlock(&menu_mut);
+}
+
+static void menu_get_value_input_handler(char c)
+{
+	int tmpLen;
+	struct cursor_pos p={.line=0};
+
+	tmpLen = strlen(p_getValueBuffer);
+	{
+		char str[50];
+		sprintf(str, "New char received %x | Buffer len : %d", c, strlen(p_getValueBuffer));
+		debug(str);
+	}
+	if( c >= 0x20 && c < 0x7F) // only allow displayable chars
+	{
+		// store the char
+		p_getValueBuffer[tmpLen] = c;
+		tmpLen++;
+	}
+	else if(c == 0x08 || c == 0x7F)
+	{
+		// remove the last char
+		if(tmpLen > 0)
+		{
+			p_getValueBuffer[tmpLen -1] = 0;
+		}
+	}
+
+	p.col=getValueBufferCursorPos;
+
+	// display the buffer
+	pthread_mutex_lock(&menu_mut);
+	set_cursor_pos(statusFieldPos);
+	move_cursor(p);
+	clear_end_of_line();
+	printf("%s", p_getValueBuffer);
+	fflush(stdout);
+	pthread_mutex_unlock(&menu_mut);
+
+	// check for CR or LF
+	if(c == 0x0A || c == 0x0D || tmpLen >= getValueBufferLen)
+	{
+		// make sure to force last buffer char to 0
+		p_getValueBuffer[getValueBufferLen] = 0;
+
+		// call the callback function
+		if(p_getValueBufferReturnHandler != NULL)
+			p_getValueBufferReturnHandler(0, p_getValueBuffer);
+
+		// restore the default input handler
+		menu_set_input_handler(NULL);
+
+		// free the buffer
+		free(p_getValueBuffer);
+		p_getValueBuffer = NULL;
+		getValueBufferLen = 0;
+	}
+}
+
+void menu_get_value(char *message, unsigned char maxLen, void (*returnHandler)(int errno, char* retStr))
+{
+	debug("Entering menu_get_value()");
+
+	// create the buffer
+	if(p_getValueBuffer != NULL)
+		free(p_getValueBuffer);
+
+	p_getValueBuffer = malloc(maxLen+1);
+	getValueBufferLen = maxLen;
+	p_getValueBufferReturnHandler = returnHandler;
+	getValueBufferCursorPos = strnlen(message, 255) + 1;
+
+	if(p_getValueBuffer != NULL)
+	{
+		debug("Buffer is alocated, change the input handler");
+
+		menu_status(message);
+
+		memset(p_getValueBuffer, 0, getValueBufferLen);
+		// set the input handler
+		menu_set_input_handler(menu_get_value_input_handler);
+	}
+	else
+	{
+		char msg[] = "Cannot allocate buffer !!!";
+
+		debug(msg);
+
+		menu_status(msg);
+		getValueBufferLen = 0;
+
+		if(p_getValueBufferReturnHandler != NULL)
+			p_getValueBufferReturnHandler(-1, NULL);
+	}
 }
 
 void menu_exit(void)
