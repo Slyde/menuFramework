@@ -37,8 +37,26 @@ void item4_action(void)
 
 }
 
+void item5_newValueHandler(int errno, char* str)
+{
+	char msg[255];
+
+	debug("New value received");
+
+	sprintf(msg, "New value received : errno : %d | value : %s", errno, str);
+
+	menu_status(msg);
+}
+
+void item5_action(void)
+{
+	debug("Try th get value function");
+	menu_get_value("Test the get value function :", 10, item5_newValueHandler);
+}
+
 void subMenu1_item1_action(void)
 {
 	debug("Entering a second sub menu level");
 	menu_enter(&subMenu2Page);
 }
+

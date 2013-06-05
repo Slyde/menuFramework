@@ -14,6 +14,7 @@ void item1_action(void);
 void item2_action(void);
 void item3_action(void);
 void item4_action(void);
+void item5_action(void);
 
 /* -------------------- PAGE 1 ----------------------*/
 
@@ -33,13 +34,18 @@ struct menu_item firstPage_item4 = {
 		.p_item_text = "Test input handler",
 		.p_item_action = item4_action
 };
+struct menu_item firstPage_item5 = {
+		.p_item_text = "Test get value",
+		.p_item_action = item5_action
+};
 
 struct menu_item *firstPageItemTable[] =
 {
 		&firstPage_item1,
 		&firstPage_item2,
 		&firstPage_item3,
-		&firstPage_item4
+		&firstPage_item4,
+		&firstPage_item5
 };
 
 char firstPageTitle[] = "First page ...";
@@ -47,7 +53,7 @@ struct menu_page firstPage = {
 		.p_prev = NULL,
 		.p_page_title = firstPageTitle,
 		.p_items_table = (struct menu_item**)&firstPageItemTable,
-		.nb_items = 4,
+		.nb_items = 5,
 		.p_page_enter = NULL,
 		.p_page_exit = NULL
 };
