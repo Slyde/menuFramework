@@ -7,26 +7,28 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <stdarg.h>
 
-#ifdef DEBUG
-void debug_msg(char *file_name, int file_line, char *msg)
+void debug_msg(char *file_name, int file_line, const char *format, ...)
 {
+	va_list ap;
 
 	time_t t;
 	struct tm lt;
 	char str[10];
+
+	va_start(ap, format);
 
 	time(&t);
 	lt = *localtime(&t);
 
 	strftime(str, 9, "%H:%M:%S", &lt);
 
-	fprintf(stderr, "%s %s:%d => %s\n", str, file_name, file_line, msg);
+	fprintf(stderr, "%s %s:%d => ", str, file_name, file_line);
+	vfprintf(stderr, format, ap);
+	fprintf(stderr, "\n");
+
+	fflush(stderr);
 
 }
-#else
-void debug_msg(char *file_name, char *msg)
-{
 
-}
-#endif
