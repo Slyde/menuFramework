@@ -9,7 +9,7 @@
 #define DEBUG_H_
 
 #ifdef DEBUG
-#define debug(message, ...) debug_msg(__FILE__, __LINE__, message, __VA_ARGS__)
+#define debug(message, ...) debug_msg(__FILE__, __LINE__, message, ##__VA_ARGS__)
 #else
 #define debug(message, ...)
 #endif
